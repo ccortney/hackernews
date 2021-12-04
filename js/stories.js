@@ -97,7 +97,7 @@ async function getAndShowStoryOnSubmit(evt) {
 
 $addStoryForm.on("submit", getAndShowStoryOnSubmit);
 
-
+// Shows favorites
 function putFavStoriesOnPage() {
   console.debug("putFavStoriesOnPage");
 
@@ -117,24 +117,27 @@ function putFavStoriesOnPage() {
 async function recordAddorDeleteFavorites(evt) {
   console.debug("recordAddorDeleteFavorites")
 
+// Find the LI assosciated with the checkbox and that story's id
   const $closestLi = evt.target.closest("li");
   const storyId = $closestLi.getAttribute("id");
   const story = storyList.stories.find(s => s.storyId === storyId);
 
-  // If the box was already checked, remove from favorites
+  // If the box is now checked, add to favorites
   if (evt.target.checked) {
     await currentUser.addFavorite(story)
   }
-  // If the box was not checked, add to favorites
+  // If the box is now unchecked, remove from favorites
   else {
     await currentUser.deleteFavorite(story);
+  // reload favorite stories on page so that the deleted story is removed
     await putFavStoriesOnPage()
   }
 }
+// Allows recordAddorDeleteFavorites to fun whether checking on the full story list or favorites list
 $allStoriesList.on("click", "#checkbox", recordAddorDeleteFavorites)
 $favStoriesList.on("click", "#checkbox", recordAddorDeleteFavorites)
 
-
+// Shows stories added by the user
 function putOwnStoriesOnPage() {
   console.debug("putOwnStoriesOnPage");
 
